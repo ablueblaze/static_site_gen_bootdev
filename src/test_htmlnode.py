@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -58,6 +58,73 @@ class TestHTMLNode(unittest.TestCase):
         node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
         self.assertEqual(
             '<a href="https://www.google.com">Click me!</a>', node.to_html()
+        )
+
+        ####
+        # Testing ParentNode
+    def test_parent_repr(self):
+        """ returns all values of ParentNode using repr
+        """
+        node = ParentNode(
+            "div",
+            # None,
+            [
+                LeafNode("a", "dude, this is cool"),
+                LeafNode(None, "Not cool dude!"),
+                LeafNode("div", "Big bounce!")
+            ]
+        )
+        self.assertEqual(
+            "HTMLNode(div, None, [LeafNode(a, dude, this is cool, None), LeafNode(None, Not cool dude!, None), LeafNode(div, Big bounce!, None)], None)",
+            repr(node)
+        )
+
+    def test_parent_primary_return(self):
+        """ returns the resulting string if ParentNode is passed correct data
+        """
+        node = ParentNode(
+            "p",
+            [
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
+        self.assertEqual(
+            "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>",
+            node.to_html()
+        )
+
+    def test_parent_with_props(self):
+        """ return ParentNode if passed correct date including props
+        """
+
+    def test_parent_nested_parent(self):
+        """ returns ParentNodes nested in ParentNodes (The Chaos!)
+        """
+        nested_node = ParentNode(
+            "p",
+            [
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
+        node = ParentNode(
+            "p",
+            [
+                nested_node.to_html(),
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
+        self.assertEqual(
+            "<p><p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>",
+            node.to_html()
         )
 
 
