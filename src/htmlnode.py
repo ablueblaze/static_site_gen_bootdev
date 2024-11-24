@@ -33,7 +33,7 @@ class LeafNode(HTMLNode):
 
     def to_html(self):
         if self.value is None:
-            raise ValueError
+            raise ValueError("LeafNode, value is None")
         if self.tag is None:
             return str(self.value)
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
@@ -48,13 +48,13 @@ class ParentNode(HTMLNode):
 
     def to_html(self):
         if self.tag is None:
-            raise ValueError("No tag passed")
+            raise ValueError("ParentNode, No tag passed")
         if self.children is None:
-            raise ValueError("No children passed")
+            raise ValueError("ParentNode, No children passed")
         result_string = f'<{self.tag}{self.props_to_html()}>'
         for child in self.children:
-            result_string = result_string + \
-                f"{LeafNode(child.tag, child.value).to_html()}"
+            result_string = result_string + f"{child.to_html()}"
+            # f"{LeafNode(child.tag, child.value).to_html()}"
         return result_string + f"</{self.tag}>"
 
     def __repl__(self):

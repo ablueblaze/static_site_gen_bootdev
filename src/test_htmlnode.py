@@ -97,25 +97,34 @@ class TestHTMLNode(unittest.TestCase):
         )
 
     def test_parent_with_props(self):
-        """ return ParentNode if passed correct date including props
+        """ return ParentNode if passed correct data including props
+        """
+
+    def test_parent_nested_with_props(self):
+        """ return ParentNode if passed correct data including props
+        Nested with ParentNodes
+        """
+
+    def test_parent_nested_with_props2(self):
+        """ return ParentNode if passed correct data including props
+        Nested with ParentNodes with props
         """
 
     def test_parent_nested_parent(self):
         """ returns ParentNodes nested in ParentNodes (The Chaos!)
         """
-        nested_node = ParentNode(
-            "p",
-            [
-                LeafNode("b", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
-            ],
-        )
         node = ParentNode(
             "p",
             [
-                nested_node.to_html(),
+                ParentNode(
+                    "p",
+                    [
+                        LeafNode("b", "Bold text"),
+                        LeafNode(None, "Normal text"),
+                        LeafNode("i", "italic text"),
+                        LeafNode(None, "Normal text"),
+                    ],
+                ),
                 LeafNode("b", "Bold text"),
                 LeafNode(None, "Normal text"),
                 LeafNode("i", "italic text"),
