@@ -1,3 +1,7 @@
+# for jank testing only
+from textnode import TextNode, TextType
+
+
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
         # tag = A string representing an html tag
@@ -59,3 +63,53 @@ class ParentNode(HTMLNode):
 
     def __repl__(self):
         return f"ParentNode({self.tag}, {self.children}, {self.props})"
+
+
+def text_node_to_html_node(text_node):
+    match text_node.text_type.value:
+        case 'text':
+            return LeafNode(None, text_node.text)
+        case 'bold':
+            return LeafNode('b', text_node.text)
+        case 'italic':
+            return LeafNode('i', text_node.text)
+        case 'code':
+            return LeafNode('code', text_node.text)
+        case 'link':
+            return LeafNode('a', text_node.text, 'href')
+        case 'image':
+            return LeafNode('img', '', {'src', 'alt'})
+    raise Exception("TextType not valid")
+
+# Test to show how it works
+
+
+def test_text_node_to_html_node(text_node):
+    print('Debug>>> text_node.value: ', text_node.text_type.value)
+    if text_node.text_type.value == 'bold':
+        return True
+    return False
+
+
+'''Testing outputs of text_node_to_html_node
+node_text = TextNode('Test text one', TextType.TEXT)
+node_bold = TextNode('Test text one', TextType.BOLD)
+node_italic = TextNode('Test text one', TextType.ITALIC)
+node_code = TextNode('Test text one', TextType.CODE)
+node_link = TextNode('Test text one', TextType.LINK)
+node_image = TextNode('Test text one', TextType.IMAGE)
+
+# print('Debug>>> text_node_to_html_node: ', test_text_node_to_html_node(node))
+print('Debug>>> text_node_to_html_node output "text": ',
+      text_node_to_html_node(node_text))
+print('Debug>>> text_node_to_html_node output "bold": ',
+      text_node_to_html_node(node_bold))
+print('Debug>>> text_node_to_html_node output "italic": ',
+      text_node_to_html_node(node_italic))
+print('Debug>>> text_node_to_html_node output "code": ',
+      text_node_to_html_node(node_code))
+print('Debug>>> text_node_to_html_node output "link": ',
+      text_node_to_html_node(node_link))
+print('Debug>>> text_node_to_html_node output "image": ',
+      text_node_to_html_node(node_image))
+'''

@@ -2,18 +2,22 @@ from enum import Enum
 
 
 class TextType(Enum):
-    NORM = "normal"
+    """Note: Sets a predefined list of items that can be used
+    in the TextNode class as valid text types.
+    In essence restricting the development side of things.
+    """
+    TEXT = "text"
     BOLD = "bold"
-    ITAL = "italic"
+    ITALIC = "italic"
     CODE = "code"
     LINK = "link"
-    IMAG = "image"
+    IMAGE = "image"
 
 
 class TextNode:
-    def __init__(self, text, text_type, url=None):
+    def __init__(self, text: str, text_type: TextType, url: str = None):
         self.text = text
-        self.text_type = text_type.value
+        self.text_type = text_type
         self.url = url
 
     def __eq__(self, other):

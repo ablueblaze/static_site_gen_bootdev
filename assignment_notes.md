@@ -1,51 +1,29 @@
 # Assignment notes for static site builder
 
 ## Current Assignment:
-Parent nodes
 
-### Create another child class of the HTMLNode called ParentNode. Its constructor should differ from the parent class in that:
-- The tag and children arguments are not optional
-- It doesn't take a value argument
-- props is optional
-- (the exact opposite of the LeafNode class)
-
-### Add a .to_html method.
-- If the object doesn't have a tag, raise a ValueError.
-- If there are no children, raise a ValueError with a different message.
-- Otherwise, return a string representing the HTML tag of the node and its children. This should be a recursive method (each recursion being called on a nested child node). I iterated over all the children and called to_html on each, concatenating the results and injecting them between the opening and closing tags of the parent.
-
-For example, this node and its children:
+### Write a function:
 ```python
-node = ParentNode(
-    "p",
-    [
-        LeafNode("b", "Bold text"),
-        LeafNode(None, "Normal text"),
-        LeafNode("i", "italic text"),
-        LeafNode(None, "Normal text"),
-    ],
-)
-
-node.to_html()
+def text_node_to_html_node(text_node):
 ```
-Should convert to:
-```HTML
-<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>
-```
+- It should handle each type of the TextType enum. If it gets a TextNode that is none of those types, it should raise an exception.
 
-Don't worry about indentation or pretty-printing. (When pretty-printed it would look like this):
-```HTML
-<p>
-    <b>Bold text</b>
-    Normal text
-    <i>italic text</i>
-    Normal text
-</p>
-```
+- TextType.TEXT: This should become a LeafNode with no tag, just a raw text value.
+- TextType.BOLD: This should become a LeafNode with a "b" tag and the text
+- TextType.ITALIC: "i" tag, text
+- TextType.CODE: "code" tag, text
+- TextType.LINK: "a" tag, anchor text, and "href" prop
+- TextType.IMAGE: "img" tag, empty string value, "src" and "alt" props ("src" is the image URL, "alt" is the alt text)
 
-Most editors can be configured to auto-format HTML on save, so we don't need to worry about implementing that in our code.
+- Add some tests.
+- Run and submit the tests from the root of the project.
 
-I wrote many tests for this class. I recommend you do the same, there is a lot of room for error. Test all the edge cases you can think of, including nesting ParentNode objects inside of one another, multiple children, and no children.
-
-Once you're happy that everything is working as intended, run and submit the tests from the root of the project.
-
+ERROR: test_textnode_to_htmlnode_no_type (test_htmlnode.TestHTMLNode)
+pass a None TextType to the function
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blaze/Workspace/github.com/ablueblaze/static_site_gen_bootdev/src/test_htmlnode.py", line 203, in test_textnode_to_htmlnode_no_type
+    node = TextNode('test from the node', TextType.CAPS)
+  File "/usr/lib/python3.10/enum.py", line 437, in __getattr__
+    raise AttributeError(name) from None
+AttributeError: CAPS
