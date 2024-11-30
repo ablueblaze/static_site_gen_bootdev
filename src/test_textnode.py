@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 
 
 class TestTextNode(unittest.TestCase):
@@ -41,6 +41,69 @@ class TestTextNode(unittest.TestCase):
             "TextNode(This is a test, TextType.TEXT, www.stumbleupon.com)", repr(
                 node)
         )
+
+
+class TestTextNodeToHTMLNode(unittest.TestCase):
+
+    # non-functioning test:
+    #
+    # def test_textnode_to_htmlnode_invalid_type(self):
+    #     ''' pass a non-compatable TextType to the function
+    #     '''
+    #     node = TextNode('Test from the node', TextType.CAPS)
+    #     with self.assertRaises(ValueError):
+    #         text_node_to_html_node(node)
+    #         # TextNode('Test from the node', TextType.CAPS)
+
+    def test_textnode_to_htmlnode_text(self):
+        ''' passing TextType.TEXT to text_node_to_html_node()
+        '''
+        node = text_node_to_html_node(
+            TextNode('Test from the node', TextType.TEXT))
+        self.assertEqual(None, node.tag)
+        self.assertEqual('Test from the node', node.value)
+
+    def test_textnode_to_htmlnode_bold(self):
+        ''' passing TextType.BOLD to text_node_to_html_node()
+        '''
+        node = text_node_to_html_node(
+            TextNode('Test from the node', TextType.BOLD))
+        self.assertEqual('b', node.tag)
+        self.assertEqual('Test from the node', node.value)
+
+    def test_textnode_to_htmlnode_italic(self):
+        ''' passing TextType.ITALIC to text_node_to_html_node()
+        '''
+        node = text_node_to_html_node(
+            TextNode('Test from the node', TextType.ITALIC))
+        self.assertEqual('i', node.tag)
+        self.assertEqual('Test from the node', node.value)
+
+    def test_textnode_to_htmlnode_code(self):
+        ''' passing TextType.CODE to text_node_to_html_node()
+        '''
+        node = text_node_to_html_node(
+            TextNode('Test from the node', TextType.CODE))
+        self.assertEqual('code', node.tag)
+        self.assertEqual('Test from the node', node.value)
+
+    def test_textnode_to_htmlnode_link(self):
+        ''' passing TextType.LINK to text_node_to_html_node()
+        '''
+        node = text_node_to_html_node(
+            TextNode('Test from the node', TextType.LINK))
+        self.assertEqual('a', node.tag)
+        self.assertEqual('Test from the node', node.value)
+        self.assertEqual('href', node.props)
+
+    def test_textnode_to_htmlnode_image(self):
+        ''' passing TextType.IMAGE to text_node_to_html_node()
+        '''
+        node = text_node_to_html_node(
+            TextNode('Test from the node', TextType.IMAGE)
+        )
+        self.assertEqual(
+            {'src': None, 'alt': 'Test from the node'}, node.props)
 
 
 if __name__ == "__main__":
